@@ -75,7 +75,7 @@ void Game::update()
 
 void Game::renderPlayerCards() {
     sf::Texture texture;
-
+    Player p;
     float posX = 0;
     float posY = 0;
     for (const auto& player : table.getPlayers()) {
