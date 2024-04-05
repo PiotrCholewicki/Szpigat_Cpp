@@ -2,7 +2,7 @@
 
 Table::Table()
 {
-	this->initVariables();
+	
 }
 
 int Table::getRoundId()
@@ -23,7 +23,8 @@ void Table::dealCardsForPlayers()
 				drawableCards.getTopCard().setVisibility(flag);
 				
 			}
-			std::cout << drawableCards.getTopCard().isVisibleForAll() << ' ' << drawableCards.getTopCard() << std::endl;
+			std::cout << drawableCards.getTopCard().isVisibleForAll() << ' ' << drawableCards.getTopCard()<<drawableCards.getTopCard().getOwnerId() << std::endl;
+			drawableCards.getTopCard().setOwnerId(it.getId());
 			it.drawCard(drawableCards);
 		}
 	}
@@ -86,4 +87,15 @@ int Table::passTurn()
 std::vector<Player> Table::getPlayers()
 {
 	return players;
+}
+
+int Table::getStage()
+{
+	return stage;
+}
+
+int Table::setStage(int stage_)
+{
+	stage = stage_;
+	return stage;
 }

@@ -1,6 +1,6 @@
 #include "Card.h"
 #include "Display.h"
-Card::Card(Suits s, CardNames c) : suit(s), cardName(c), isVisibleForEveryone(false), owner_id(0)
+Card::Card(Suits s, CardNames c) : suit(s), cardName(c), isVisibleForEveryone(false), owner_id(-100) //default owner,change it later
 {       //according to the game rules, set the values of cards
         switch (c) {
         case CardNames::ace:
@@ -135,8 +135,12 @@ bool& Card::setVisibility(bool visibility)
 {
     
     Card::isVisibleForEveryone = visibility;
-    std::cout << "Changing visibility to: " << visibility << ' ';
     return isVisibleForEveryone;
+}
+
+int Card::getOwnerId()
+{
+    return owner_id;
 }
 
 #include "Card.h" // Za³ó¿my, ¿e Twoje pliki nag³ówkowe i Ÿród³owe maj¹ odpowiednie nazwy

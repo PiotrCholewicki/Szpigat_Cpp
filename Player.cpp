@@ -11,7 +11,9 @@ Player::Player(std::string name_, int id_) : points(0), name(name_), id(id_)
 
 void Player::drawCard(Deck &d)
 {
-	this->playersHand.push_back(d.dealTopCard());
+	Card drawnCard = d.dealTopCard(); // Draw card from deck
+	drawnCard.setOwnerId(this->id); // Set owner of card
+	this->playersHand.push_back(drawnCard); // Add card to players hand
 	
 }
 
@@ -27,6 +29,23 @@ std::vector<Card> Player::getCards() const
 
 int Player::getId()
 {
+	return id;
+}
+
+std::string Player::getName()
+{
+	return name;
+}
+
+std::string Player::setName(std::string nameToSet)
+{
+	name = nameToSet;
+	return name;
+}
+
+int Player::setId(int idToSet)
+{
+	id = idToSet;
 	return id;
 }
 

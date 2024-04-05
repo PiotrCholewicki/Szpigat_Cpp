@@ -10,6 +10,9 @@ public:
 	int getPoints();
 	std::vector<Card> getCards() const;
 	int getId();
+	std::string getName();
+	std::string setName(std::string nameToSet);
+	int setId(int idToSet);
 	friend std::ostream& operator<<(std::ostream& s, const Player& p);
 private:
 	std::string name;

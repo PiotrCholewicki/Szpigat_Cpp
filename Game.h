@@ -9,6 +9,7 @@
 #include "Deck.h"
 #include "Card.h"
 #include "Table.h"
+#include <sstream>
 class Game {
 private:
 	
@@ -26,10 +27,14 @@ private:
 	//std::vector<Player> players;
 	Table table;
 	Player me; //the one you play 
+	int idForPlayer; //automatically set players id
+	int stage;
 	void initVariables();
 	void initWindow();
-	int stage;
 	
+	sf::Font roboto;
+	sf::Text loginText;
+	std::ostringstream oss;
 
 public:
 	Game();
@@ -39,8 +44,9 @@ public:
 	//Functions
 	void pollEvents();
 	void updateMousePositions();
-
+	void updateLoginScreen();
 	void update();
+	void renderLoginScreen();
 	void renderPlayerCards();
 	void render();
 };

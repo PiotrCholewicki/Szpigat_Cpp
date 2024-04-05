@@ -2,42 +2,36 @@
 
 void Game::initVariables()
 {
-    
-    
+    this->stage = 0;
+    this->idForPlayer = 0;
+    this->me = Player("STARTING_GAME", -1);
 }
 
 void Game::initWindow()
 {
-	this->videoMode.width = 1080;
-	this->videoMode.height = 720;
-	//this->videoMode.getDesktopMode; //for test
-	this->window = new sf::RenderWindow(this->videoMode, "Szpigat", sf::Style::Titlebar | sf::Style::Close);
-	this->window->setFramerateLimit(60);
+    this->videoMode.width = 1080;
+    this->videoMode.height = 720;
+    this->window = new sf::RenderWindow(this->videoMode, "Szpigat", sf::Style::Titlebar | sf::Style::Close);
+    this->window->setFramerateLimit(60);
+    this->roboto.loadFromFile("font-roboto\\Roboto-light.ttf");
+    this->loginText.setFont(roboto);
 }
-/*
-void Game::initDecks()
-{
-    //this->drawableCards.shuffle();
-    //this->stackOfCards.clear();
-}
-*/
 
 
 Game::Game()
 {
-	this->initVariables();
-	this->initWindow();
-	//this->initDecks();
+    this->initVariables();
+    this->initWindow();
 }
 
 Game::~Game()
 {
-	delete this->window;
+    delete this->window;
 }
 
 const bool Game::isRunning() const
 {
-	return this->window->isOpen();
+    return this->window->isOpen();
 }
 
 void Game::pollEvents()
@@ -61,16 +55,42 @@ void Game::pollEvents()
 
 void Game::updateMousePositions()
 {
-    // updates the mouse positions: mouse position to window (Vector2i)
     this->mousePosWindow = sf::Mouse::getPosition(*this->window);
-    this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow); //same but in floats
+    this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
+}
+
+void Game::updateLoginScreen()
+{
+    std::string name;
+    this->oss.str("");
+    this->oss << "Enter your name: ";
+    this->loginText.setString(this->oss.str());
+    this->window->draw(this->loginText);
+    this->window->display();
+    std::cin >> name;
+    this->me.setName(name);
+    this->me.setId(idForPlayer);
+    idForPlayer++;
+    this->stage++;
+    table.setStage(stage);
+    table.initVariables();
 }
 
 void Game::update()
 {
-
     this->pollEvents();
     this->updateMousePositions();
+    if (this->stage == 0) {
+        this->updateLoginScreen();
+    }
+
+}
+
+void Game::renderLoginScreen()
+{
+    this->oss.str("");
+    this->loginText.setString(this->oss.str());
+    this->window->draw(this->loginText);
 }
 
 void Game::renderPlayerCards() {
@@ -105,20 +125,15 @@ void Game::renderPlayerCards() {
         posY += 150;
     }
 }
-    
-
-
 
 void Game::render()
 {
-    /*
-    - clear old frame
-    - render objects
-    - display frame in window
-
-    */
     this->window->clear(sf::Color(0, 128, 43));
-    //Draw game objects
-    this->renderPlayerCards();
+    if (stage == 0) {
+        this->renderLoginScreen();
+    }
+    else if (stage == 1) {
+        this->renderPlayerCards();
+    }
     this->window->display();
 }

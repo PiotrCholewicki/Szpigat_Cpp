@@ -7,10 +7,12 @@ public:
 	int getRoundId();
 	void dealCardsForPlayers();
 	void dealOneCard();
-
 	std::vector<Player> getPlayers();
-private:
+	int getStage();
+	int setStage(int stage_);
 	void initVariables();
+private:
+	
 	void initPlayers(int n);
 	void initDecks();
 	void initRoundId();
@@ -19,5 +21,6 @@ private:
 	Deck drawableCards;
 	Deck stackOfCards;
 	int round_id;
+	int stage;
 };
 
