@@ -25,9 +25,10 @@ private:
 	//Deck stackOfCards;
 	//std::vector<Player> players;
 	Table table;
-
+	Player me; //the one you play 
 	void initVariables();
 	void initWindow();
+	int stage;
 	
 
 public:
