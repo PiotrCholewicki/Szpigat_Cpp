@@ -29,6 +29,7 @@ std::vector<Card> Player::getCards() const
 
 int Player::getId()
 {
+	
 	return id;
 }
 

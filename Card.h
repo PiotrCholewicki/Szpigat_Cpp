@@ -31,7 +31,7 @@ public:
     int getValue() const;
     std::string getFileName() const;
     const bool isVisibleForAll() const;
-    int setOwnerId(int id); //in future replace into Player
+    int& setOwnerId(const int& id); //in future replace into Player
     bool& setVisibility(bool visibility);
     int getOwnerId();
     friend std::ostream& operator<<(std::ostream& s, const Card& c);

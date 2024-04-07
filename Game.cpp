@@ -70,10 +70,20 @@ void Game::updateLoginScreen()
     std::cin >> name;
     this->me.setName(name);
     this->me.setId(idForPlayer);
-    idForPlayer++;
+    this->allPlayers.push_back(me);
+    this->idForPlayer++;
     this->stage++;
-    table.setStage(stage);
-    table.initVariables();
+    int samplePlayerId = 10;
+    //for now create table with only one player, then update it for multiplayer 
+    for (int i = 0; i < 3; i++) {
+        Player samplePlayer("SAMPLE_PLAYER", samplePlayerId);
+        allPlayers.push_back(samplePlayer);
+        samplePlayerId++;
+    }
+    Table gameTable(allPlayers);
+    this->table = gameTable;
+    this->table.setStage(stage);
+    this->table.initVariables();
 }
 
 void Game::update()

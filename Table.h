@@ -4,6 +4,7 @@ class Table
 {
 public:
 	Table();
+	Table(std::vector<Player> gamePlayers);
 	int getRoundId();
 	void dealCardsForPlayers();
 	void dealOneCard();
@@ -13,7 +14,7 @@ public:
 	void initVariables();
 private:
 	
-	void initPlayers(int n);
+	void initMissingPlayers(int n);
 	void initDecks();
 	void initRoundId();
 	int passTurn();

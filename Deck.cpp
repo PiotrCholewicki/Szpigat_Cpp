@@ -63,7 +63,7 @@ int Deck::getSize()
 
 Card& Deck::getTopCard()
 {
-    return cards[cards.size() - 1];
+    return cards.back();
 }
 
 std::vector<Card> Deck::getCards() const

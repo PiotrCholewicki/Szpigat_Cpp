@@ -5,6 +5,14 @@ Table::Table()
 	
 }
 
+Table::Table(std::vector<Player> gamePlayers)
+{
+	for (int i = 0; i < gamePlayers.size(); i++) {
+		players.push_back(gamePlayers[i]);
+	}
+	
+}
+
 int Table::getRoundId()
 {
 	return round_id;
@@ -23,8 +31,8 @@ void Table::dealCardsForPlayers()
 				drawableCards.getTopCard().setVisibility(flag);
 				
 			}
+			drawableCards.getTopCard().setOwnerId(it.getId()); 
 			std::cout << drawableCards.getTopCard().isVisibleForAll() << ' ' << drawableCards.getTopCard()<<drawableCards.getTopCard().getOwnerId() << std::endl;
-			drawableCards.getTopCard().setOwnerId(it.getId());
 			it.drawCard(drawableCards);
 		}
 	}
@@ -50,20 +58,28 @@ void Table::dealOneCard()
 
 void Table::initVariables()
 {
-	int amountOfPlayers = 4;
+	//int amountOfPlayers = 4 - players.size();
 	this->initDecks();
-	this->initPlayers(amountOfPlayers);
+	//this->initMissingPlayers(amountOfPlayers);
 	this->initRoundId();
 	this->dealCardsForPlayers();
 	
 }
-
+/*
 void Table::initPlayers(int n)
 {
 	for (int i = 0; i < n; i++) {
 		Player p1("PLAYER_NAME", i);
 		this->players.push_back(p1);
 	}
+}
+*/
+
+
+void Table::initMissingPlayers(int n)
+{
+
+	
 }
 
 void Table::initDecks()

@@ -27,6 +27,7 @@ private:
 	//std::vector<Player> players;
 	Table table;
 	Player me; //the one you play 
+	std::vector<Player> allPlayers; //for future online feature
 	int idForPlayer; //automatically set players id
 	int stage;
 	void initVariables();

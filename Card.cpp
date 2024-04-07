@@ -125,10 +125,10 @@ const bool Card::isVisibleForAll() const
     return isVisibleForEveryone;
 }
 
-int Card::setOwnerId(int id)
+int& Card::setOwnerId(const int &id)
 {
-    owner_id = id;
-    return id;
+    this->owner_id = id;
+    return owner_id;
 }
 
 bool& Card::setVisibility(bool visibility)
