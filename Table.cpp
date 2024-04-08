@@ -32,7 +32,7 @@ void Table::dealCardsForPlayers()
 				
 			}
 			drawableCards.getTopCard().setOwnerId(it.getId()); 
-			std::cout << drawableCards.getTopCard().isVisibleForAll() << ' ' << drawableCards.getTopCard()<<drawableCards.getTopCard().getOwnerId() << std::endl;
+			std::cout << drawableCards.getTopCard().isVisibleForAll() << ' ' << drawableCards.getTopCard()<< ' '<<drawableCards.getTopCard().getOwnerId() << std::endl;
 			it.drawCard(drawableCards);
 		}
 	}
@@ -65,6 +65,18 @@ void Table::initVariables()
 	this->dealCardsForPlayers();
 	
 }
+
+void Table::playerTurn(int currentPlayerId)
+{
+
+}
+
+Card Table::getTopCardFromStack()
+{
+	return stackOfCards.getTopCard();
+}
+
+
 /*
 void Table::initPlayers(int n)
 {
@@ -86,6 +98,8 @@ void Table::initDecks()
 {
 	this->drawableCards.shuffle();
 	this->stackOfCards.clear();
+	//draw first card on the table
+	this->stackOfCards.putCard(drawableCards.dealTopCard());
 }
 
 void Table::initRoundId()
@@ -96,7 +110,9 @@ void Table::initRoundId()
 int Table::passTurn()
 {
 	round_id += 1;
-	round_id %= players.size();
+	if (round_id >= players.size()) {
+		round_id = 0;
+	}
 	return round_id;
 }
 

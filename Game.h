@@ -36,6 +36,9 @@ private:
 	sf::Font roboto;
 	sf::Text loginText;
 	std::ostringstream oss;
+	
+	
+	
 
 public:
 	Game();
@@ -45,9 +48,17 @@ public:
 	//Functions
 	void pollEvents();
 	void updateMousePositions();
+
 	void updateLoginScreen();
+	//in future, split loginscreen into seperate functions
+	void updateLoginText();
+	void initializeGameTable();
+	void processPlayerInput();
+
+	
 	void update();
 	void renderLoginScreen();
 	void renderPlayerCards();
+	void renderLastCardOnStack();
 	void render();
 };

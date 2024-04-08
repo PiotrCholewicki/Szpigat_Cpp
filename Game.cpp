@@ -48,6 +48,32 @@ void Game::pollEvents()
             }
             break;
         }
+        case sf::Event::MouseButtonPressed: {
+            if (ev.mouseButton.button == sf::Mouse::Left) {
+                // Play card on the table
+                sf::Vector2i mousePosition = sf::Mouse::getPosition(*window);
+                
+                for (auto& player : allPlayers) {
+                    for (auto& card : player.getCards()) {
+                        /*
+                            if (card.getGlobalBounds().contains(mousePosition.x, mousePosition.y)) {
+                            
+                            stackOfCards.putCard(card);
+                            
+                            card.setVisibility(true);
+                            
+                            player.removeCard(card);
+                            
+                            passTurn();
+                            
+                        */
+                        return;
+                        //}
+                    }
+                }
+            }
+            break;
+            }
 
         }
     }
@@ -86,6 +112,7 @@ void Game::updateLoginScreen()
     this->table.initVariables();
 }
 
+
 void Game::update()
 {
     this->pollEvents();
@@ -93,7 +120,7 @@ void Game::update()
     if (this->stage == 0) {
         this->updateLoginScreen();
     }
-
+    
 }
 
 void Game::renderLoginScreen()
@@ -112,6 +139,7 @@ void Game::renderPlayerCards() {
         for (const auto& card : player.getCards()) {
             if (card.isVisibleForAll()) {
                 if (texture.loadFromFile(card.getFileName())) {
+                    
                     sf::Sprite sprite(texture);
                     sprite.setPosition(posX, posY);
                     sprite.setScale(0.2f, 0.2f);
@@ -136,6 +164,19 @@ void Game::renderPlayerCards() {
     }
 }
 
+void Game::renderLastCardOnStack()
+{
+    sf::Texture texture;
+    if (texture.loadFromFile(table.getTopCardFromStack().getFileName())) {
+        float posX = 683.f;
+        float posY = 250.f;
+        sf::Sprite sprite(texture);
+        sprite.setPosition(posX, posY);
+        sprite.setScale(0.2f, 0.2f);
+        this->window->draw(sprite);
+    }
+}
+
 void Game::render()
 {
     this->window->clear(sf::Color(0, 128, 43));
@@ -144,6 +185,8 @@ void Game::render()
     }
     else if (stage == 1) {
         this->renderPlayerCards();
+        this->renderLastCardOnStack();
     }
+
     this->window->display();
 }

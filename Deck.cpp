@@ -50,7 +50,7 @@ bool Deck::isEmpty() const
     return cards.empty();
 }
 
-Card Deck::putCard(Card c)
+Card Deck::putCard(Card c) //take card from another deck or another player
 {
     cards.push_back(c);
     return c;
