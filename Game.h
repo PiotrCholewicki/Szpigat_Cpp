@@ -20,10 +20,8 @@ private:
 	//Mouse positions
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
-	//Game variables
-	//move to the table
-	//Deck drawableCards;
-	//Deck stackOfCards;
+	
+
 	//std::vector<Player> players;
 	Table table;
 	Player me; //the one you play 
@@ -37,7 +35,7 @@ private:
 	sf::Font roboto;
 	sf::Text loginText;
 	std::ostringstream oss;
-	
+	bool renderFrame; //render frames only when there is a need to, so game doesnt lag
 	
 	
 
@@ -62,5 +60,6 @@ public:
 	void renderLoginScreen();
 	void renderPlayerCards();
 	void renderLastCardOnStack();
+	void renderOneFrame();
 	void render();
 };

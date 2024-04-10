@@ -5,6 +5,7 @@ void Game::initVariables()
     this->stage = 0;
     this->idForPlayer = 0;
     this->me = Player("STARTING_GAME", -1);
+    this->renderFrame = false;
 }
 
 void Game::initWindow()
@@ -12,7 +13,7 @@ void Game::initWindow()
     this->videoMode.width = 1080;
     this->videoMode.height = 720;
     this->window = new sf::RenderWindow(this->videoMode, "Szpigat", sf::Style::Titlebar | sf::Style::Close);
-    this->window->setFramerateLimit(144);
+    this->window->setFramerateLimit(60);
     this->roboto.loadFromFile("font-roboto\\Roboto-light.ttf");
     this->loginText.setFont(roboto);
 }
@@ -75,7 +76,7 @@ void Game::updateMousePositions()
 {
     this->mousePosWindow = sf::Mouse::getPosition(*this->window);
     this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
-    std::cout << mousePosView.x <<" "<< mousePosView.y << std::endl;
+    
 }
 
 void Game::startRound()
@@ -85,6 +86,8 @@ void Game::startRound()
     this->table = gameTable;
     this->table.setStage(stage);
     this->table.initVariables();
+    this->renderFrame = true;
+    this->renderOneFrame();
 }
 
 void Game::updateLoginScreen()
@@ -102,6 +105,7 @@ void Game::updateLoginScreen()
     this->idForPlayer++;
     this->stage++;
     this->initPlayers();
+    
     this->startRound();
 }
 
@@ -113,7 +117,7 @@ void Game::updateCardOnclick()
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         for (int i = 0; i < this->cardShapes.size(); i++) {
             if (this->cardShapes[i].getGlobalBounds().contains(this->mousePosView)) {
-                std::cout << "kliknieto na karte: " << cardShapes[i].getPosition().x<<std::endl;
+                std::cout << "kliknieto na karte: " << cardShapes[i].getPosition().x<<' '<< cardShapes[i].getPosition().y << std::endl;
             }
         }
     }
@@ -162,7 +166,7 @@ void Game::renderPlayerCards() {
                 if (texture.loadFromFile(card.getFileName())) {
                     sf::Sprite sprite(texture);
                     sprite.setPosition(card.getPosX(), card.getPosY());
-                    sprite.setScale(0.2f, 0.2f);
+                    //sprite.setScale(0.2f, 0.2f);
                     this->addCardShapes(sprite);
                     this->window->draw(sprite);
                     posX += 100;
@@ -172,7 +176,7 @@ void Game::renderPlayerCards() {
                 if (texture.loadFromFile("img/back.png")) {
                     sf::Sprite sprite(texture);
                     sprite.setPosition(posX, posY);
-                    sprite.setScale(0.2f, 0.2f);
+                    //sprite.setScale(0.2f, 0.2f);
                     this->addCardShapes(sprite);
                     this->window->draw(sprite);
                     posX += 100;
@@ -194,21 +198,40 @@ void Game::renderLastCardOnStack()
         float posY = 250.f;
         sf::Sprite sprite(texture);
         sprite.setPosition(posX, posY);
-        sprite.setScale(0.2f, 0.2f);
+        //sprite.setScale(0.2f, 0.2f);
         this->window->draw(sprite);
     }
 }
 
-void Game::render()
+void Game::renderOneFrame()
 {
     this->window->clear(sf::Color(0, 128, 43));
+    this->renderPlayerCards();
+    this->renderLastCardOnStack();
+    renderFrame = false;
+}
+
+void Game::render()
+{
+    //this->window->clear(sf::Color(0, 128, 43));
     if (stage == 0) {
+        
         this->renderLoginScreen();
+        this->window->display();
+        
     }
     else if (stage == 1) {
-        this->renderPlayerCards();
-        this->renderLastCardOnStack();
+        
+        if (renderFrame) {
+            this->window->clear(sf::Color(0, 128, 43));
+            this->renderOneFrame();
+        }
+        else {
+            this->renderOneFrame();
+        }
+        this->window->display();
+
     }
 
-    this->window->display();
+    //this->window->display();
 }
