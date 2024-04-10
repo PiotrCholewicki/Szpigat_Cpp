@@ -5,7 +5,6 @@ void Game::initVariables()
     this->stage = 0;
     this->idForPlayer = 0;
     this->me = Player("STARTING_GAME", -1);
-    this->renderFrame = false;
 }
 
 void Game::initWindow()
@@ -84,10 +83,8 @@ void Game::startRound()
 
     Table gameTable(allPlayers);
     this->table = gameTable;
-    this->table.setStage(stage);
     this->table.initVariables();
-    this->renderFrame = true;
-    this->renderOneFrame();
+
 }
 
 void Game::updateLoginScreen()
@@ -166,7 +163,7 @@ void Game::renderPlayerCards() {
                 if (texture.loadFromFile(card.getFileName())) {
                     sf::Sprite sprite(texture);
                     sprite.setPosition(card.getPosX(), card.getPosY());
-                    //sprite.setScale(0.2f, 0.2f);
+                    
                     this->addCardShapes(sprite);
                     this->window->draw(sprite);
                     posX += 100;
@@ -176,7 +173,7 @@ void Game::renderPlayerCards() {
                 if (texture.loadFromFile("img/back.png")) {
                     sf::Sprite sprite(texture);
                     sprite.setPosition(posX, posY);
-                    //sprite.setScale(0.2f, 0.2f);
+                    
                     this->addCardShapes(sprite);
                     this->window->draw(sprite);
                     posX += 100;
@@ -198,37 +195,27 @@ void Game::renderLastCardOnStack()
         float posY = 250.f;
         sf::Sprite sprite(texture);
         sprite.setPosition(posX, posY);
-        //sprite.setScale(0.2f, 0.2f);
+        
         this->window->draw(sprite);
     }
 }
 
-void Game::renderOneFrame()
-{
-    this->window->clear(sf::Color(0, 128, 43));
-    this->renderPlayerCards();
-    this->renderLastCardOnStack();
-    renderFrame = false;
-}
+
 
 void Game::render()
 {
-    //this->window->clear(sf::Color(0, 128, 43));
+    
     if (stage == 0) {
         
         this->renderLoginScreen();
         this->window->display();
-        
     }
     else if (stage == 1) {
+
+        this->window->clear(sf::Color(0, 128, 43));
+        this->renderPlayerCards();
+        this->renderLastCardOnStack();
         
-        if (renderFrame) {
-            this->window->clear(sf::Color(0, 128, 43));
-            this->renderOneFrame();
-        }
-        else {
-            this->renderOneFrame();
-        }
         this->window->display();
 
     }

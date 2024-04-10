@@ -68,10 +68,6 @@ void Table::initVariables()
 	
 }
 
-void Table::playerTurn(int currentPlayerId)
-{
-
-}
 
 Card Table::getTopCardFromStack()
 {
@@ -79,22 +75,10 @@ Card Table::getTopCardFromStack()
 }
 
 
-/*
-void Table::initPlayers(int n)
-{
-	for (int i = 0; i < n; i++) {
-		Player p1("PLAYER_NAME", i);
-		this->players.push_back(p1);
-	}
-}
-*/
 
 
-void Table::initMissingPlayers(int n)
-{
 
-	
-}
+
 
 void Table::initDecks()
 {
@@ -123,13 +107,3 @@ std::vector<Player> Table::getPlayers()
 	return players;
 }
 
-int Table::getStage()
-{
-	return stage;
-}
-
-int Table::setStage(int stage_)
-{
-	stage = stage_;
-	return stage;
-}

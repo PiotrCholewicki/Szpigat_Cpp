@@ -35,9 +35,6 @@ private:
 	sf::Font roboto;
 	sf::Text loginText;
 	std::ostringstream oss;
-	bool renderFrame; //render frames only when there is a need to, so game doesnt lag
-	
-	
 
 public:
 	Game();
@@ -60,6 +57,6 @@ public:
 	void renderLoginScreen();
 	void renderPlayerCards();
 	void renderLastCardOnStack();
-	void renderOneFrame();
+	
 	void render();
 };
