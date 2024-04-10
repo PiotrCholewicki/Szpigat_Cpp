@@ -12,9 +12,20 @@ void Game::initWindow()
     this->videoMode.width = 1080;
     this->videoMode.height = 720;
     this->window = new sf::RenderWindow(this->videoMode, "Szpigat", sf::Style::Titlebar | sf::Style::Close);
-    this->window->setFramerateLimit(60);
+    this->window->setFramerateLimit(144);
     this->roboto.loadFromFile("font-roboto\\Roboto-light.ttf");
     this->loginText.setFont(roboto);
+}
+
+void Game::initPlayers()
+{
+    int samplePlayerId = 10;
+    //for now create table with only one player, then update it for multiplayer 
+    for (int i = 0; i < 3; i++) {
+        Player samplePlayer("SAMPLE_PLAYER", samplePlayerId);
+        allPlayers.push_back(samplePlayer);
+        samplePlayerId++;
+    }
 }
 
 
@@ -38,41 +49,22 @@ void Game::pollEvents()
 {
     while (this->window->pollEvent(this->ev)) {
         switch (this->ev.type) {
-        case sf::Event::Closed: { //closing on clicking the top right corner "X"
-            this->window->close();
-            break;
-        }
-        case sf::Event::KeyPressed: { //close on clicking escape
-            if (this->ev.key.code == sf::Keyboard::Escape) {
+            case sf::Event::Closed: { //closing on clicking the top right corner "X"
                 this->window->close();
+                break;
             }
-            break;
-        }
-        case sf::Event::MouseButtonPressed: {
-            if (ev.mouseButton.button == sf::Mouse::Left) {
-                // Play card on the table
-                sf::Vector2i mousePosition = sf::Mouse::getPosition(*window);
-                
-                for (auto& player : allPlayers) {
-                    for (auto& card : player.getCards()) {
-                        /*
-                            if (card.getGlobalBounds().contains(mousePosition.x, mousePosition.y)) {
-                            
-                            stackOfCards.putCard(card);
-                            
-                            card.setVisibility(true);
-                            
-                            player.removeCard(card);
-                            
-                            passTurn();
-                            
-                        */
-                        return;
-                        //}
-                    }
+            case sf::Event::KeyPressed: { //close on clicking escape
+                if (this->ev.key.code == sf::Keyboard::Escape) {
+                    this->window->close();
                 }
+                break;
             }
-            break;
+            case sf::Event::MouseButtonPressed: {
+                if (ev.mouseButton.button == sf::Mouse::Left) {
+                    // Play card on the table
+
+                }
+                break;
             }
 
         }
@@ -83,6 +75,16 @@ void Game::updateMousePositions()
 {
     this->mousePosWindow = sf::Mouse::getPosition(*this->window);
     this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
+    std::cout << mousePosView.x <<" "<< mousePosView.y << std::endl;
+}
+
+void Game::startRound()
+{
+
+    Table gameTable(allPlayers);
+    this->table = gameTable;
+    this->table.setStage(stage);
+    this->table.initVariables();
 }
 
 void Game::updateLoginScreen()
@@ -99,26 +101,44 @@ void Game::updateLoginScreen()
     this->allPlayers.push_back(me);
     this->idForPlayer++;
     this->stage++;
-    int samplePlayerId = 10;
-    //for now create table with only one player, then update it for multiplayer 
-    for (int i = 0; i < 3; i++) {
-        Player samplePlayer("SAMPLE_PLAYER", samplePlayerId);
-        allPlayers.push_back(samplePlayer);
-        samplePlayerId++;
-    }
-    Table gameTable(allPlayers);
-    this->table = gameTable;
-    this->table.setStage(stage);
-    this->table.initVariables();
+    this->initPlayers();
+    this->startRound();
 }
 
+
+
+void Game::updateCardOnclick()
+{
+    // Check if the left mouse button is pressed
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        for (int i = 0; i < this->cardShapes.size(); i++) {
+            if (this->cardShapes[i].getGlobalBounds().contains(this->mousePosView)) {
+                std::cout << "kliknieto na karte: " << cardShapes[i].getPosition().x<<std::endl;
+            }
+        }
+    }
+}
+
+
+
+
+
+void Game::addCardShapes(sf::Sprite cardToAdd)
+{
+    this->cardShapes.push_back(cardToAdd);
+}
 
 void Game::update()
 {
     this->pollEvents();
     this->updateMousePositions();
+    this->updateCardOnclick();
     if (this->stage == 0) {
         this->updateLoginScreen();
+        
+    }
+    if (this->stage == 1) {
+        
     }
     
 }
@@ -135,14 +155,15 @@ void Game::renderPlayerCards() {
     Player p;
     float posX = 0;
     float posY = 0;
-    for (const auto& player : table.getPlayers()) {
-        for (const auto& card : player.getCards()) {
-            if (card.isVisibleForAll()) {
+    for (auto& player : table.getPlayers()) {
+        for (auto& card : player.getCards()) {
+            if (card.isVisibleForAll()) { 
+                card.setPosition(posX, posY); 
                 if (texture.loadFromFile(card.getFileName())) {
-                    
                     sf::Sprite sprite(texture);
-                    sprite.setPosition(posX, posY);
+                    sprite.setPosition(card.getPosX(), card.getPosY());
                     sprite.setScale(0.2f, 0.2f);
+                    this->addCardShapes(sprite);
                     this->window->draw(sprite);
                     posX += 100;
                 }
@@ -152,17 +173,18 @@ void Game::renderPlayerCards() {
                     sf::Sprite sprite(texture);
                     sprite.setPosition(posX, posY);
                     sprite.setScale(0.2f, 0.2f);
-
+                    this->addCardShapes(sprite);
                     this->window->draw(sprite);
                     posX += 100;
                 }
-
             }
         }
         posX = 0;
         posY += 150;
     }
 }
+
+
 
 void Game::renderLastCardOnStack()
 {

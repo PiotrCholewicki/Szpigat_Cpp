@@ -53,9 +53,7 @@ int Player::setId(int idToSet)
 std::ostream& operator<<(std::ostream& s, const Player& p)
 {
 	s << p.id << ' ' << p.name << ' ';
-	for (const auto& card : p.playersHand) {
-		s << card << ' ';
-	}
+
 	return s;
 }
 

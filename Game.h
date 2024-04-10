@@ -32,7 +32,8 @@ private:
 	int stage;
 	void initVariables();
 	void initWindow();
-	
+	void initPlayers();
+	std::vector<sf::Sprite> cardShapes;
 	sf::Font roboto;
 	sf::Text loginText;
 	std::ostringstream oss;
@@ -48,14 +49,15 @@ public:
 	//Functions
 	void pollEvents();
 	void updateMousePositions();
-
+	void startRound();
 	void updateLoginScreen();
 	//in future, split loginscreen into seperate functions
 	void updateLoginText();
 	void initializeGameTable();
 	void processPlayerInput();
+	void updateCardOnclick();
 
-	
+	void addCardShapes(sf::Sprite cardToAdd);
 	void update();
 	void renderLoginScreen();
 	void renderPlayerCards();

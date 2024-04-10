@@ -1,6 +1,6 @@
 #include "Card.h"
 #include "Display.h"
-Card::Card(Suits s, CardNames c) : suit(s), cardName(c), isVisibleForEveryone(false), owner_id(-100) //default owner,change it later
+Card::Card(Suits s, CardNames c) : suit(s), cardName(c), isVisibleForEveryone(false), owner_id(-100), posX(0), posY(0) //default owner,change it later
 {       //according to the game rules, set the values of cards
         switch (c) {
         case CardNames::ace:
@@ -125,6 +125,13 @@ const bool Card::isVisibleForAll() const
     return isVisibleForEveryone;
 }
 
+void Card::setPosition(float posX_, float posY_)
+{
+    posX = posX_;
+    posY = posY_;
+    
+}
+
 int& Card::setOwnerId(const int &id)
 {
     this->owner_id = id;
@@ -143,7 +150,21 @@ int Card::getOwnerId()
     return owner_id;
 }
 
-#include "Card.h" // Za³ó¿my, ¿e Twoje pliki nag³ówkowe i Ÿród³owe maj¹ odpowiednie nazwy
+void Card::setSprite(sf::Sprite spriteToSet)
+{
+    this->cardsSprite = spriteToSet;
+    //this->texture.
+}
+
+float Card::getPosX()
+{
+    return posX;
+}
+float Card::getPosY()
+{
+    return posY;
+}
+
 
 std::ostream& operator<<(std::ostream& s, const Card& c) {
     switch (c.cardName) {
