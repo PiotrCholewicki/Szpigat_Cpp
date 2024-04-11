@@ -21,13 +21,6 @@ void Table::dealCardsForPlayers()
 	for (auto& it : players) {
 		
 		for(int i = 0; i < 4; i++){
-			
-			if (i == 2 or i == 3) {
-				//hide two cards for player
-				bool flag = true;
-				drawableCards.getTopCard().setVisibility(flag);
-				
-			}
 			drawableCards.getTopCard().setOwnerId(it.getId()); 
 			std::cout << drawableCards.getTopCard().isVisibleForAll() << ' ' << drawableCards.getTopCard()<< ' '<<drawableCards.getTopCard().getOwnerId() << std::endl;
 			

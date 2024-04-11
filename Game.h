@@ -29,7 +29,7 @@ private:
 	sf::Font roboto;
 	sf::Text loginText;
 	std::ostringstream oss;
-	
+	bool nextRound;
 
 	int idForPlayer; //automatically set players id
 	int stage;
@@ -55,7 +55,7 @@ public:
 	void updateLoginText();
 	void initializeGameTable();
 	void processPlayerInput();
-	void updateCardOnclick();
+	void updateCardOnClick();
 
 	void addCardShapes(sf::Sprite cardToAdd);
 	void update();
