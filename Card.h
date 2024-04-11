@@ -41,8 +41,10 @@ public:
     float getPosY();
     sf::Sprite cardsSprite;
     sf::Texture texture;
+    sf::Sprite getSprite(); 
+    bool contains(sf::Vector2f point) const; 
     friend std::ostream& operator<<(std::ostream& s, const Card& c);
-
+    bool operator==(const Card& other) const;
 private:
     Suits suit;
     CardNames cardName;

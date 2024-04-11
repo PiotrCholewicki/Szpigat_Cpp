@@ -5,7 +5,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
 #include "Player.h"
-#include "Display.h"
+
 #include "Deck.h"
 #include "Card.h"
 #include "Table.h"
@@ -21,20 +21,23 @@ private:
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
 	
-
-	//std::vector<Player> players;
 	Table table;
 	Player me; //the one you play 
+	Player* currentPlayer; 
 	std::vector<Player> allPlayers; //for future online feature
-	int idForPlayer; //automatically set players id
-	int stage;
-	void initVariables();
-	void initWindow();
-	void initPlayers();
 	std::vector<sf::Sprite> cardShapes;
 	sf::Font roboto;
 	sf::Text loginText;
 	std::ostringstream oss;
+	
+
+	int idForPlayer; //automatically set players id
+	int stage;
+	int round_id;
+	void initVariables();
+	void initWindow();
+	void initPlayers();
+
 
 public:
 	Game();
@@ -45,6 +48,8 @@ public:
 	void pollEvents();
 	void updateMousePositions();
 	void startRound();
+	void playerTurn();
+	void endTurn();
 	void updateLoginScreen();
 	//in future, split loginscreen into seperate functions
 	void updateLoginText();
@@ -57,6 +62,7 @@ public:
 	void renderLoginScreen();
 	void renderPlayerCards();
 	void renderLastCardOnStack();
+	void renderButton();
 	
 	void render();
 };

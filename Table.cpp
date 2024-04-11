@@ -13,10 +13,7 @@ Table::Table(std::vector<Player> gamePlayers)
 	
 }
 
-int Table::getRoundId()
-{
-	return round_id;
-}
+
 
 void Table::dealCardsForPlayers()
 {
@@ -63,7 +60,7 @@ void Table::initVariables()
 	//int amountOfPlayers = 4 - players.size();
 	this->initDecks();
 	//this->initMissingPlayers(amountOfPlayers);
-	this->initRoundId();
+	
 	this->dealCardsForPlayers();
 	
 }
@@ -88,21 +85,11 @@ void Table::initDecks()
 	this->stackOfCards.putCard(drawableCards.dealTopCard());
 }
 
-void Table::initRoundId()
-{
-	this->round_id = 0;
-}
 
-int Table::passTurn()
-{
-	round_id += 1;
-	if (round_id >= players.size()) {
-		round_id = 0;
-	}
-	return round_id;
-}
 
-std::vector<Player> Table::getPlayers()
+
+
+std::vector<Player>& Table::getPlayers()
 {
 	return players;
 }

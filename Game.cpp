@@ -5,6 +5,7 @@ void Game::initVariables()
     this->stage = 0;
     this->idForPlayer = 0;
     this->me = Player("STARTING_GAME", -1);
+    this->round_id = 0;
 }
 
 void Game::initWindow()
@@ -15,6 +16,8 @@ void Game::initWindow()
     this->window->setFramerateLimit(60);
     this->roboto.loadFromFile("font-roboto\\Roboto-light.ttf");
     this->loginText.setFont(roboto);
+    
+    
 }
 
 void Game::initPlayers()
@@ -84,7 +87,29 @@ void Game::startRound()
     Table gameTable(allPlayers);
     this->table = gameTable;
     this->table.initVariables();
+    this->playerTurn();
+    
 
+}
+
+void Game::playerTurn()
+{
+    table.getPlayers()[round_id].drawCard(table.drawableCards);
+    std::cout << "Tura gracza: " << currentPlayer << std::endl;
+    std::cout<< table.getPlayers()[round_id].getCards().size();
+    sf::RectangleShape endTurnButton(sf::Vector2f(50.f, 50.f)); 
+    endTurnButton.setPosition(500.f, static_cast<float>(round_id * 150.f) + 0.f);
+    this->window->clear();
+    this->window->draw(endTurnButton); 
+    this->window->display();
+}
+
+void Game::endTurn()
+{
+    round_id++;
+    if (round_id >= allPlayers.size()) {
+        round_id = 0;
+    }
 }
 
 void Game::updateLoginScreen()
@@ -114,14 +139,21 @@ void Game::updateCardOnclick()
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         for (int i = 0; i < this->cardShapes.size(); i++) {
             if (this->cardShapes[i].getGlobalBounds().contains(this->mousePosView)) {
-                std::cout << "kliknieto na karte: " << cardShapes[i].getPosition().x<<' '<< cardShapes[i].getPosition().y << std::endl;
+                std::cout << "kliknieto na karte: " << cardShapes[i].getPosition().x << ' ' << cardShapes[i].getPosition().y << std::endl;
+                
+                //find card while its position is known
+                int cardIndex = cardShapes[i].getPosition().x / 100.f;
+                int playerIndex = cardShapes[i].getPosition().y / 150.f;
+                auto& currentPlayer = table.getPlayers()[playerIndex];
+                currentPlayer.moveCard(currentPlayer.getCards()[cardIndex], table.stackOfCards); 
+                sf::sleep(sf::milliseconds(250));
+                break;
             }
+
         }
     }
+
 }
-
-
-
 
 
 void Game::addCardShapes(sf::Sprite cardToAdd)
@@ -153,11 +185,12 @@ void Game::renderLoginScreen()
 
 void Game::renderPlayerCards() {
     sf::Texture texture;
-    Player p;
     float posX = 0;
     float posY = 0;
     for (auto& player : table.getPlayers()) {
-        for (auto& card : player.getCards()) {
+        
+        for (auto card : player.getCards()) {
+            
             if (card.isVisibleForAll()) { 
                 card.setPosition(posX, posY); 
                 if (texture.loadFromFile(card.getFileName())) {
@@ -200,6 +233,20 @@ void Game::renderLastCardOnStack()
     }
 }
 
+void Game::renderButton()
+{
+    sf::RectangleShape endTurnButton(sf::Vector2f(50.f, 50.f));
+    endTurnButton.setFillColor(sf::Color(255,155,0));
+    endTurnButton.setPosition(500.f, static_cast<float>(round_id * 150.f) + 0.f);
+    sf::Text endTurnText("End\nTurn", roboto, 20);
+    endTurnText.setFillColor(sf::Color::Black);
+    endTurnText.setPosition(505.f, 1.f);
+
+    
+    this->window->draw(endTurnButton);
+    this->window->draw(endTurnText);
+}
+
 
 
 void Game::render()
@@ -215,7 +262,7 @@ void Game::render()
         this->window->clear(sf::Color(0, 128, 43));
         this->renderPlayerCards();
         this->renderLastCardOnStack();
-        
+        this->renderButton();
         this->window->display();
 
     }

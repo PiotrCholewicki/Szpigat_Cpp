@@ -47,9 +47,6 @@
     <ClInclude Include="Game.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="Display.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="Table.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>

@@ -1,5 +1,5 @@
 #include "Card.h"
-#include "Display.h"
+
 Card::Card(Suits s, CardNames c) : suit(s), cardName(c), isVisibleForEveryone(false), owner_id(-100), posX(0), posY(0) //default owner,change it later
 {       //according to the game rules, set the values of cards
         switch (c) {
@@ -163,6 +163,21 @@ float Card::getPosX()
 float Card::getPosY()
 {
     return posY;
+}
+
+sf::Sprite Card::getSprite()
+{
+    return sf::Sprite();
+}
+
+bool Card::contains(sf::Vector2f point) const
+{
+    return false;
+}
+
+bool Card::operator==(const Card& other) const
+{
+    return (suit == other.suit) && (cardName == other.cardName);
 }
 
 

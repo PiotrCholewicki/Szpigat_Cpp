@@ -4,7 +4,9 @@
 #include <algorithm>
 #include <random>
 #include <iostream>
-#include "Display.h"
+#include<SFML/Graphics.hpp>
+class Game;
+
 class Deck {
 public:
 	Deck();
@@ -19,6 +21,7 @@ public:
 	Card& getTopCard();
 	std::vector<Card> getCards() const;
 	friend std::ostream& operator<<(std::ostream s, const Deck& deck);
+	friend class Game;
 private:
 	std::vector<Card> cards;
 
