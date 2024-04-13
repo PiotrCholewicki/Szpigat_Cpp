@@ -15,7 +15,9 @@ Player::Player(std::string name_, int id_) : points(0), name(name_), id(id_)
 void Player::drawCard(Deck &d)
 {
 	Card drawnCard = d.dealTopCard(); // Draw card from deck
-	drawnCard.setOwnerId(this->id*(1));// Set ownership of card
+	if (drawnCard.getOwnerId() == -100) { //case when id is unset, when picking card from 
+		drawnCard.setOwnerId(this->id * (1));// Set ownership of card
+	}
 	this->playersHand.push_back(drawnCard); // Add card to players hand
 	
 
@@ -26,13 +28,13 @@ void Player::drawCard(Deck &d)
 
 
 void Player::moveCard(const Card& toMove, Deck& toPut){
-	auto it = std::find(playersHand.begin(), playersHand.end(), toMove); // ZnajdŸ kartê w rêce gracza
-	if (it != playersHand.end()) { // Jeœli karta zosta³a znaleziona
-		toPut.putCard(toMove); // Umieœæ kartê na stosie
-		playersHand.erase(it); // Usuñ kartê z rêki gracza
+	auto it = std::find(playersHand.begin(), playersHand.end(), toMove); 
+	if (it != playersHand.end()) { 
+		toPut.putCard(toMove); 
+		playersHand.erase(it); 
 	}
 	else {
-		std::cout << "Card not found in hand!" << std::endl; // Komunikat, gdy karta nie zosta³a znaleziona w rêce gracza
+		std::cout << "Card not found in hand!" << std::endl; 
 	}
 }
 
@@ -75,6 +77,20 @@ void Player::displayPlayerCards()
 		std::cout << playersHand[i] <<playersHand[i].getOwnerId() << std::endl;
 	}
 
+}
+
+void Player::distributePointsOnRoundsEnd()
+{
+	for (auto card : playersHand) {
+		points += card.getValue();
+	}
+	std::cout << "Gracz: " << id << " Punkty: " << points<<std::endl;
+}
+
+void Player::addPoints(int points_)
+{
+	
+	points += points_;
 }
 
 std::ostream& operator<<(std::ostream& s, const Player& p)

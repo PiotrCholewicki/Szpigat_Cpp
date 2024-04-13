@@ -21,8 +21,13 @@ void Table::dealCardsForPlayers()
 	for (auto& it : players) {
 		
 		for(int i = 0; i < 4; i++){
-			drawableCards.getTopCard().setOwnerId(it.getId());
-			std::cout << drawableCards.getTopCard().isVisibleForAll() << ' ' << drawableCards.getTopCard()<< ' '<<drawableCards.getTopCard().getOwnerId() << std::endl;
+			if (i == 0 or i == 1) {
+				drawableCards.getTopCard().setOwnerId(it.getId());
+			}
+			else {
+				drawableCards.getTopCard().setOwnerId(it.getId()*(-1));
+			}
+			//std::cout << drawableCards.getTopCard().isVisibleForAll() << ' ' << drawableCards.getTopCard()<< ' '<<drawableCards.getTopCard().getOwnerId() << std::endl;
 			it.drawCard(drawableCards);
 
 		}

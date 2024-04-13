@@ -40,7 +40,7 @@ public:
     float getPosX();
     float getPosY();
     void makeCardVisibleFor5Seconds(); 
-    
+    const CardNames getCardName() const;
     sf::Sprite cardsSprite;
     sf::Texture texture;
     sf::Sprite getSprite(); 

@@ -15,6 +15,8 @@ public:
 	std::string setName(std::string nameToSet);
 	int setId(int idToSet);
 	void displayPlayerCards();
+	void distributePointsOnRoundsEnd();
+	void addPoints(int points);
 	friend std::ostream& operator<<(std::ostream& s, const Player& p);
 private:
 	std::string name;

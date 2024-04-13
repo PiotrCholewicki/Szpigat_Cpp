@@ -91,7 +91,7 @@ void Game::startRound()
     this->table = gameTable;
 
     this->table.initVariables();
-    this->displayCardsForAllPlayers();
+    
     this->playerTurn();
     
     
@@ -148,15 +148,40 @@ void Game::updateCardOnClick()
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         for (int i = 0; i < this->cardShapes.size(); i++) {
             if (this->cardShapes[i].getGlobalBounds().contains(this->mousePosView)) {
-                std::cout << "kliknieto na karte: " << cardShapes[i].getPosition().x << ' ' << cardShapes[i].getPosition().y << std::endl;
-                
+
                 //find card while its position is known
                 int cardIndex = cardShapes[i].getPosition().x / 100.f;
                 int playerIndex = cardShapes[i].getPosition().y / 150.f;
                 auto& currentPlayer = table.getPlayers()[playerIndex];
-
-                currentPlayer.moveCard(currentPlayer.getCards()[cardIndex], table.stackOfCards);
-                nextRound = true;
+                //first turn
+                if (currentPlayer.getId() == me.getId() and clicksOnTurn == 0) {
+                    std::cout << "Choose first card from your hand to play ";
+                    currentPlayer.moveCard(currentPlayer.getCards()[cardIndex], table.stackOfCards);
+                    clicksOnTurn++;
+                }
+                else { //playing other cards, also when its not your turn
+                    if (currentPlayer.getCards()[cardIndex].getCardName() == table.getTopCardFromStack().getCardName()) 
+                    { 
+                        //legal move, you dont lose, you just 
+                        currentPlayer.moveCard(currentPlayer.getCards()[cardIndex], table.stackOfCards);
+                    }
+                    else {
+                        //illegal move, you lose
+                        std::cout << "SPUCHLES, KONIEC RUNDY :D " << std::endl;
+                        
+                        for (auto& player : allPlayers) {
+                            player.distributePointsOnRoundsEnd();
+                            //restart round
+                            
+                        }
+                        me.addPoints(15);
+                        this->startRound();
+                        sf::sleep(sf::milliseconds(500));
+                        break;
+                    }
+                    
+                }
+                //nextRound = true;
                 sf::sleep(sf::milliseconds(250));
                 if (nextRound) {
                     endTurn();
@@ -165,7 +190,7 @@ void Game::updateCardOnClick()
                 }
                 break;
             }
-            else {
+            else { // end turn on clicking the button
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     if (endTurnButton.getGlobalBounds().contains(this->mousePosView)) {
                         

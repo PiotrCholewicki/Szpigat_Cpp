@@ -173,6 +173,12 @@ void Card::makeCardVisibleFor5Seconds()
     
 }
 
+const CardNames Card::getCardName() const
+{
+    return cardName;
+}
+
+
 
 sf::Sprite Card::getSprite()
 {
