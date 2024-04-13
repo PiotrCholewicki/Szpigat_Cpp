@@ -1,12 +1,13 @@
 #include "Game.h"
-
+#include<thread>
 void Game::initVariables()
 {
     this->stage = 0;
-    this->idForPlayer = 0;
+    this->idForPlayer = 1;
     this->me = Player("STARTING_GAME", -1);
     this->round_id = 0;
-    this->nextRound;
+    this->nextRound = false;
+    this->clicksOnTurn = 0;
 }
 
 void Game::initWindow()
@@ -84,24 +85,28 @@ void Game::updateMousePositions()
 
 void Game::startRound()
 {
-
+    
     Table gameTable(allPlayers);
+    
     this->table = gameTable;
+
     this->table.initVariables();
+    this->displayCardsForAllPlayers();
     this->playerTurn();
+    
     
 
 }
 
 void Game::playerTurn()
 {
+    this->clicksOnTurn = 0;
     table.getPlayers()[round_id].drawCard(table.drawableCards);
     std::cout << "Tura gracza: " << table.getPlayers()[round_id] << std::endl;
+    //table.getPlayers()[round_id].displayPlayerCards();
 
 
-    sf::RectangleShape endTurnButton(sf::Vector2f(50.f, 50.f)); 
-    endTurnButton.setPosition(500.f, static_cast<float>(round_id * 150.f) + 0.f); // to adjust
-    
+
 
 }
 
@@ -137,6 +142,8 @@ void Game::updateLoginScreen()
 
 void Game::updateCardOnClick()
 {
+    sf::RectangleShape endTurnButton(sf::Vector2f(50.f, 50.f));
+    endTurnButton.setPosition(1030.f, +0.f); 
     // Check if the left mouse button is pressed
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         for (int i = 0; i < this->cardShapes.size(); i++) {
@@ -147,10 +154,10 @@ void Game::updateCardOnClick()
                 int cardIndex = cardShapes[i].getPosition().x / 100.f;
                 int playerIndex = cardShapes[i].getPosition().y / 150.f;
                 auto& currentPlayer = table.getPlayers()[playerIndex];
-                currentPlayer.moveCard(currentPlayer.getCards()[cardIndex], table.stackOfCards); 
+
+                currentPlayer.moveCard(currentPlayer.getCards()[cardIndex], table.stackOfCards);
                 nextRound = true;
                 sf::sleep(sf::milliseconds(250));
-
                 if (nextRound) {
                     endTurn();
                     playerTurn();
@@ -158,11 +165,47 @@ void Game::updateCardOnClick()
                 }
                 break;
             }
+            else {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    if (endTurnButton.getGlobalBounds().contains(this->mousePosView)) {
+                        
+                        nextRound = true;
+                        sf::sleep(sf::milliseconds(250));
+                        if (nextRound) {
+                            endTurn();
+                            playerTurn();
+                            nextRound = false;
+                        }
+                        break;
+
+                    }
+                }
+            }
 
         }
         
     }
 
+}
+
+void Game::displayCardsForAllPlayers()
+{
+    // Utwórz zegar do œledzenia czasu wykonywania funkcji
+    sf::Clock displayClock;
+    const sf::Time displayDuration = sf::seconds(5); // Czas trwania wyœwietlania informacji: 5 sekund
+
+    // Pêtla po wszystkich graczach i ich kartach
+    for (auto& player : allPlayers) {
+        for (auto card : player.getCards()) {
+            std::cout << "raz dwa trzy" << std::endl;
+            // Tutaj mo¿esz wykonaæ inne operacje na kartach, jeœli to konieczne
+
+            // SprawdŸ, czy nie min¹³ jeszcze czas wyœwietlania informacji
+            if (displayClock.getElapsedTime() >= displayDuration) {
+                return; // Jeœli min¹³ czas, wyjdŸ z pêtli
+            }
+        }
+    }
 }
 
 
@@ -201,7 +244,8 @@ void Game::renderPlayerCards() {
         
         for (auto card : player.getCards()) {
             
-            if (card.isVisibleForAll()) { 
+            if (card.isVisibleForAll() or card.getOwnerId() == me.getId() ) { 
+                
                 card.setPosition(posX, posY); 
                 if (texture.loadFromFile(card.getFileName())) {
                     sf::Sprite sprite(texture);
@@ -247,10 +291,10 @@ void Game::renderButton()
 {
     sf::RectangleShape endTurnButton(sf::Vector2f(50.f, 50.f));
     endTurnButton.setFillColor(sf::Color(255,155,0));
-    endTurnButton.setPosition(950.f, static_cast<float>(round_id * 150.f) + 0.f);
+    endTurnButton.setPosition(1030.f, 0.f);
     sf::Text endTurnText("End\nTurn", roboto, 20);
     endTurnText.setFillColor(sf::Color::Black);
-    endTurnText.setPosition(951.f, static_cast<float>(round_id * 150.f) + 1.f);
+    endTurnText.setPosition(1031.f, 1.f);
 
     
     this->window->draw(endTurnButton);

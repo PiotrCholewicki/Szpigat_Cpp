@@ -1,5 +1,5 @@
 #include "Table.h"
-
+#include<thread>
 Table::Table()
 {
 	
@@ -21,10 +21,10 @@ void Table::dealCardsForPlayers()
 	for (auto& it : players) {
 		
 		for(int i = 0; i < 4; i++){
-			drawableCards.getTopCard().setOwnerId(it.getId()); 
+			drawableCards.getTopCard().setOwnerId(it.getId());
 			std::cout << drawableCards.getTopCard().isVisibleForAll() << ' ' << drawableCards.getTopCard()<< ' '<<drawableCards.getTopCard().getOwnerId() << std::endl;
-			
 			it.drawCard(drawableCards);
+
 		}
 	}
 
@@ -50,11 +50,11 @@ void Table::dealOneCard()
 
 void Table::initVariables()
 {
-	//int amountOfPlayers = 4 - players.size();
 	this->initDecks();
-	//this->initMissingPlayers(amountOfPlayers);
-	
+
 	this->dealCardsForPlayers();
+
+	//this->showCardsOnRoundStart();
 	
 }
 
@@ -64,8 +64,19 @@ Card Table::getTopCardFromStack()
 	return stackOfCards.getTopCard();
 }
 
+void Table::showCardsOnRoundStart()
+{
+	for (auto& it : players) {
+		int i = 0;
+		for (auto card : it.getCards()) {
+			if (i == 0 or i == 1)
+				card.makeCardVisibleFor5Seconds();
+			i++;
 
-
+		}
+		
+	}
+}
 
 
 

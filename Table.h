@@ -11,6 +11,7 @@ public:
 	void initVariables();
 	Card getTopCardFromStack(); //for rendering last card 
 	friend class Game;
+	void showCardsOnRoundStart();
 private:
 	void dealCardsForPlayers();
 	void dealOneCard();

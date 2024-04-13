@@ -1,4 +1,7 @@
 #include "Card.h"
+#include<SFML/Graphics.hpp>
+#include<thread>
+#include<chrono>
 
 Card::Card(Suits s, CardNames c) : suit(s), cardName(c), isVisibleForEveryone(false), owner_id(-100), posX(0), posY(0) //default owner,change it later
 {       //according to the game rules, set the values of cards
@@ -145,7 +148,7 @@ bool& Card::setVisibility(bool visibility)
     return isVisibleForEveryone;
 }
 
-int Card::getOwnerId()
+const int Card::getOwnerId()
 {
     return owner_id;
 }
@@ -164,6 +167,12 @@ float Card::getPosY()
 {
     return posY;
 }
+
+void Card::makeCardVisibleFor5Seconds()
+{
+    
+}
+
 
 sf::Sprite Card::getSprite()
 {
